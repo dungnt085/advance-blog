@@ -1,3 +1,26 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
+
+class Tag(models.Model):
+    value = models.TextField(max_length=100)
+    def __str__(self) -> str:
+        return self.value
+    
+
+
+class Post(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    created_at = models.DateTimeField(auto_now=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    published_at = models.DateTimeField(blank=True, null= True)
+    title = models.TextField(max_length=180)
+    slug = models.SlugField()
+    summary = models.TextField(max_length=500)
+    content = models.TextField()
+    tag = models.ManyToManyField(Tag, related_name="posts")
+    def __str__(self) -> str:
+        return self.title
+    
+    
